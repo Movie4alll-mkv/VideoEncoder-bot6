@@ -32,23 +32,23 @@ from .. import resolution as r
 from .. import tune as t
 
 
-def get_codec(file, channel='v:0'):
+def get_codec(filename, channel='v:0'):
     output = subprocess.check_output(['ffprobe', '-v', 'error', '-select_streams', channel,
                                       '-show_entries', 'stream=codec_name,codec_tag_string', '-of',
-                                      'default=nokey=1:noprint_wrappers=1', filepath])
+                                      'default=nokey=1:noprint_wrappers=1', filename])
     return output.decode('utf-8').split()
 
 
-async def encode(file):
+async def encode(filename):
     path, extension = os.splitext(file)
     name = file.split('/')
     output_file = encode_dir + name[len(name)-1] + '.mkv'
-    assert(output_file != file)
+    assert(output_file != filename)
 
-    if os.isfile(output_file):
-        print(f'[Encode] [Warning]: "{output_file}": file already exists')
+    if os.isfile(output_filename):
+        print(f'[Encode] [Warning]: "{output_filename}": file already exists')
     else:
-        print('[Encode]: ' + file)
+        print('[Encode]: ' + filename)
 
     # Codec and Bits
     codec = '-c:v copy -pix_fmt yuv420p'
